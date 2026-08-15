@@ -1,51 +1,44 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from google import genai
+from google.genai import types
 import os
-import json
-from http.server import BaseHTTPRequestHandler
-import google.generativeai as genai
 from PIL import Image
 import io
 import base64
 
-# កំណត់ Gemini API Key ពី Environment Variable របស់ Vercel
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+app = FastAPI()
 
-class handler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        try:
-            # អានទិន្នន័យ JSON ដែលផ្ញើមកពី Frontend
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+# យក API Key ពី Environment Variables
+api_key = os.environ.get("GEMINI_API_KEY")
 
-            user_query = data.get('userQuery', '')
-            base64_data = data.get('base64DataOnly', None)
-            mime_type = data.get('mimeType', 'image/jpeg')
+@app.post("/api/generate")
+async def generate_prompt(data: dict):
+    try:
+        if not api_key:
+            return {"success": False, "error": "GEMINI_API_KEY is not set in environment variables."}
 
-            # ជ្រើសរើសម៉ូដែល Gemini 1.5 Flash ຕາມការណែនាំ
-            model = genai.GenerativeModel('gemini-1.5-flash')
+        # បង្កើត Client តាមស្ដង់ដារថ្មី
+        client = genai.Client(api_key=api_key)
 
-            content_parts = [user_query]
+        user_query = data.get('userQuery', '')
+        base64_data = data.get('base64DataOnly', None)
 
-            # ប្រសិនបើមានរូបភាពយោង ត្រូវបម្លែងវាដើម្បីបញ្ជូនទៅ Vision API
-            if base64_data:
-                image_bytes = base64.b64decode(base64_data)
-                image = Image.open(io.BytesIO(image_bytes))
-                content_parts.append(image)
+        contents = [user_query]
 
-            # ហៅទៅកាន់ Gemini API
-            response = model.generate_content(content_parts)
-            generated_text = response.text
+        # ប្រសិនបើមានរូបភាព បម្លែងវាជា Part
+        if base64_data:
+            image_bytes = base64.b64decode(base64_data)
+            image = Image.open(io.BytesIO(image_bytes))
+            contents.append(image)
 
-            # ส่งលទ្ធផលត្រឡប់ទៅ Frontend វិញ
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            response_data = {"success": True, "text": generated_text}
-            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+        # ហៅប្រើម៉ូដែល gemini-2.5-flash ឬ gemini-1.5-flash តាមតម្រូវការ
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=contents
+        )
 
-        except Exception as e:
-            self.send_response(500)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            error_data = {"success": False, "error": str(e)}
-            self.wfile.write(json.dumps(error_data).encode('utf-8'))
+        return {"success": True, "text": response.text}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
