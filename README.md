@@ -1,1 +1,1 @@
-# T-ext-Prompt
+# T-ext-Prompt រិទ្ធី
