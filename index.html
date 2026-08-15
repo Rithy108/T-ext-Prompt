@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尺丨ㄒ卄ㄚ×卂丨✦ - គម្រូអត្ថបទបង្កើតរូបភាព</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neu: {
+                            bg: '#E0E8F5',
+                            card: '#E6EEFA',
+                            dark: '#1E293B',
+                            muted: '#64748B',
+                            accent: '#3B82F6',
+                            accentHover: '#2563EB',
+                            khmerRed: '#D93838',
+                            emerald: '#10B981',
+                            shadowDark: '#B8C8E0',
+                            shadowLight: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
+            background-color: #E0E8F5;
+            color: #1E293B;
+            min-height: 100vh;
+        }
+
+        .neu-flat {
+            background: #E6EEFA;
+            box-shadow: 8px 8px 18px #b8c8e0, -8px -8px 18px #ffffff;
+            border-radius: 24px;
+        }
+
+        .neu-flat-sm {
+            background: #E6EEFA;
+            box-shadow: 5px 5px 12px #c0d0e8, -5px -5px 12px #ffffff;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .neu-pressed {
+            background: #E0E8F5;
+            box-shadow: inset 5px 5px 10px #b8c8e0, inset -5px -5px 10px #ffffff;
+            border-radius: 18px;
+        }
+
+        .neu-pressed-sm {
+            background: #E0E8F5;
+            box-shadow: inset 3px 3px 6px #c0d0e8, inset -3px -3px 6px #ffffff;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .neu-btn-blue {
+            background: linear-gradient(145deg, #3b82f6, #2563eb);
+            color: #FFFFFF;
+            box-shadow: 6px 6px 14px #a8bce0, -6px -6px 14px #ffffff;
+            transition: all 0.2s ease;
+        }
+        .neu-btn-blue:hover {
+            background: linear-gradient(145deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+        }
+        .neu-btn-blue:active {
+            box-shadow: inset 4px 4px 8px #18388a, inset -4px -4px 8px #3b82f6;
+            transform: translateY(1px);
+        }
+        .neu-btn-blue:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .neu-btn-action {
+            background: #E6EEFA;
+            color: #1E293B;
+            box-shadow: 5px 5px 12px #b8c8e0, -5px -5px 12px #ffffff;
+            transition: all 0.2s ease;
+        }
+        .neu-btn-action:hover {
+            color: #3B82F6;
+            transform: translateY(-1px);
+        }
+        .neu-btn-action:active {
+            box-shadow: inset 3px 3px 6px #b8c8e0, inset -3px -3px 6px #ffffff;
+        }
+
+        .neu-badge-red {
+            background: #D93838;
+            color: #ffffff;
+            box-shadow: 3px 3px 6px #b8c8e0, -3px -3px 6px #ffffff;
+        }
+
+        .active-ar {
+            background: #E0E8F5;
+            box-shadow: inset 3px 3px 6px #c0d0e8, inset -3px -3px 6px #ffffff;
+            color: #3B82F6;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 7px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #E0E8F5;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #93C5FD;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3B82F6;
+        }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-[#E0E8F5]/90 backdrop-blur-md border-b border-[#D0DDEE]">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 neu-flat flex items-center justify-center text-neu-accent font-bold">
+                    <i data-lucide="camera" class="w-6 h-6 text-neu-accent"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-neu-dark leading-tight flex items-center gap-2">
+                        <span>尺丨ㄒ卄ㄚ×卂丨✦</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full neu-badge-red font-normal">ឡេងរិទ្ធី</span>
+                    </h1>
+                    <p class="text-xs text-neu-muted font-medium">Ultra Realistic Photography & Prompt Architect</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-2 neu-pressed px-4 py-2 text-xs font-semibold text-neu-accent">
+                <span class="w-2.5 h-2.5 rounded-full bg-neu-emerald animate-pulse"></span>
+                Midjourney / Stable Diffusion Optimized
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- Hero Banner -->
+        <div class="neu-flat p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-neu-accent pointer-events-none">
+                <i data-lucide="aperture" class="w-64 h-64"></i>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-neu-dark mb-2">
+                រិទ្ធី អេអាយ - កម្រងម៉ូឌែលកាមេរ៉ា និងកាយវិការស៊ីជម្រៅ 📷✨
+            </h2>
+            <p class="text-xs sm:text-sm text-neu-muted max-w-2xl mx-auto leading-relaxed">
+                បង្កើត និងរៀបចំ Prompt ដែលមានការពិពណ៌នាអំពីកាយវិការ (Pose) យ៉ាងរស់រវើក ស៊ីចង្វាក់គ្នាជាមួយម៉ូឌែលកាមេរ៉ាលំដាប់ពិភពលោកដោយស្វ័យប្រវត្តិ។
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Side Controls Panel -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="neu-flat p-6">
+                    <label class="block text-sm font-bold text-neu-dark mb-3 flex items-center justify-between">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="image" class="w-4 h-4 text-neu-accent"></i>
+                            រូបភាពយោង (Reference Image)
+                        </span>
+                        <span class="text-[10px] bg-neu-accent text-white px-2 py-0.5 rounded-full font-medium">Local Mode</span>
+                    </label>
+                    
+                    <!-- Drag & Drop Area -->
+                    <div id="drop-area" class="neu-pressed p-6 text-center cursor-pointer hover:opacity-95 transition-all group relative overflow-hidden h-56 flex flex-col items-center justify-center">
+                        <input type="file" id="image-input" accept="image/*" class="hidden">
+                        
+                        <div id="upload-placeholder" class="space-y-3 w-full h-full flex flex-col items-center justify-center">
+                            <div class="w-14 h-14 mx-auto neu-flat flex items-center justify-center text-neu-accent group-hover:scale-105 transition-transform">
+                                <i data-lucide="upload-cloud" class="w-7 h-7 text-neu-accent"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs sm:text-sm font-bold text-neu-dark">ចុចទីនេះ ដើម្បីទម្លាក់រូប</p>
+                                <p class="text-[11px] text-neu-muted mt-1">PNG, JPG, WEBP (ទំហំអតិបរមា 10MB)</p>
+                            </div>
+                        </div>
+
+                        <div id="preview-container" class="hidden w-full h-full relative">
+                            <img id="image-preview" src="" alt="Preview" class="w-full h-full object-cover rounded-xl shadow-inner">
+                            <button id="remove-img-btn" type="button" class="absolute top-2 right-2 p-1.5 neu-flat text-neu-khmerRed hover:bg-red-50 transition-colors" title="លុបរូបភាព">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 space-y-4 border-t border-[#D0DDEE] pt-4">
+                        <h4 class="text-xs font-bold text-neu-dark flex items-center gap-1.5 uppercase tracking-wide">
+                            <i data-lucide="sliders" class="w-4 h-4 text-neu-accent"></i>
+                            <span>រៀបចំទិន្នន័យ (Prompt Configuration)</span>
+                        </h4>
+
+                        <!-- Subject Type Selection -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">ប្រភេទតួអង្គ (Subject Type)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="subject-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-accent font-bold focus:outline-none cursor-pointer">
+                                    <option value="couple">👫 គូស្នេហ៍ (Young East Asian Couple) - ស្មា និងភ្នែកស្មើគ្នា</option>
+                                    <option value="single">👤 មនុស្សម្នាក់ (Single Portrait)</option>
+                                    <option value="auto" selected>🤖 ស្វ័យប្រវត្តិ (Professional Masterpiece Subject)</option>
+                                    <option value="none">ទេសភាព / វត្ថុ (No specific character)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Hair Style Options -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">ការកំណត់ម៉ូតសក់ (Hair Style Option)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="hair-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-dark font-medium focus:outline-none cursor-pointer">
+                                    <option value="exclude" selected>🚫 មិនសរសេរម៉ូតសក់ចូល (Exclude Hair Style Prompting)</option>
+                                    <option value="include">✨ សរសេរម៉ូតសក់ទាន់សម័យចូល (Include Modern Trendy Hairstyle)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Scenery / Background Option -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">បរិយាកាសជុំវិញ (Scenery & Mood)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="scenery-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-dark focus:outline-none font-medium cursor-pointer">
+                                    <option value="set in a traditional Cambodian landscape with ancient Angkorian temple ruins and tall sugar palm (Tanot) trees in the background, warm cultural aesthetic">ខ្មែរ Retro បុរាណ (Khmer Heritage & Temples)</option>
+                                    <option value="surrounded by a lush deep green forest with soft atmospheric mist">ធម្មជាតិព្រៃឈើ (Lush Forest, Mist)</option>
+                                    <option value="during a warm golden hour sunset, with beautiful soft rim light">ពន្លឺថ្ងៃលិច (Golden Hour Sunset)</option>
+                                    <option value="inside a high-end luxury studio setup with volumetric dramatic lighting">ស្ទូឌីយោប្រណីត (Luxury Studio)</option>
+                                    <option value="natural outdoor cinematic background with aesthetic scenery" selected>បរិយាកាសក្រៅស្ទូឌីយោធម្មជាតិ (Natural Outdoor)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- TOP Pro Camera Body Selection -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">កាមេរ៉ាកម្រិត Top (Top Pro Camera Bodies)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="camera-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-dark focus:outline-none font-medium cursor-pointer">
+                                    <optgroup label="🎬 ARRI (Cinema Gold Standard)">
+                                        <option value="Shot on Arri Alexa 35 cinema camera, extremely high dynamic range, natural skin color response" selected>Arri Alexa 35 (Ultimate Dynamic Range)</option>
+                                        <option value="Shot on Arri Alexa Mini LF, full-frame cinematic look, soft natural depth of field">Arri Alexa Mini LF (Hollywood Look)</option>
+                                    </optgroup>
+                                    <optgroup label="📸 HASSELBLAD (Medium Format)">
+                                        <option value="Shot on Hasselblad H6D-100c Medium Format, 100MP studio detail, rich micro-contrast">Hasselblad H6D-100c (100MP Detail)</option>
+                                    </optgroup>
+                                    <optgroup label="⚡ SONY (Flagship High Sharpness)">
+                                        <option value="Shot on Sony A1, 50.1MP Full-Frame Sensor, Uncompressed RAW, crisp clarity">Sony A1 (Ultra-Sharpness)</option>
+                                        <option value="Shot on Sony Venice 2 8K Cinema Camera, full frame cinematic texture">Sony Venice 2 8K (Cinematic)</option>
+                                    </optgroup>
+                                    <optgroup label="❤️ CANON & NIKON">
+                                        <option value="Shot on Canon EOS R5 Mark II, High Dynamic Range, Warm Skin Color Profile">Canon EOS R5 Mark II (Warm Skin)</option>
+                                        <option value="Shot on Nikon Z9 Professional Flagship, sharp edge detail, true contrast">Nikon Z9 (High Precision)</option>
+                                    </optgroup>
+                                    <optgroup label="🎞️ LEICA & VINTAGE">
+                                        <option value="Shot on Leica M11 Rangefinder, Authentic Leica Color Science, micro-contrast">Leica M11 (Leica Color Science)</option>
+                                        <option value="Shot on Contax T3 35mm film camera, Kodak Portra aesthetic, soft vintage grain">Contax T3 35mm (Vintage Grain)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Lens Setup Selection -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">កែវឡេន (Lens Setup)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="lens-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-dark focus:outline-none font-medium cursor-pointer">
+                                    <option value="paired with 85mm f/1.2 prime lens, soft shallow depth of field, creamy natural bokeh">85mm f/1.2 Portrait (Creamy Bokeh)</option>
+                                    <option value="paired with 35mm f/1.4 Anamorphic Lens, subtle widescreen lens flare, cinematic compression">35mm f/1.4 Anamorphic (Cinematic)</option>
+                                    <option value="paired with 50mm f/1.2 prime lens, natural human eye perspective, crisp sharpness">50mm f/1.2 Lens (Eye Perspective)</option>
+                                    <option value="paired with 24mm f/1.4 wide angle prime lens, detailed background environmental storytelling">24mm f/1.4 Wide (Environmental)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Camera Setting / Film Profile -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">ការកំណត់ពន្លឺ (Exposure & Lighting)</label>
+                            <div class="neu-pressed-sm p-1">
+                                <select id="settings-select" class="w-full bg-transparent text-xs py-1.5 px-2 text-neu-dark focus:outline-none font-medium cursor-pointer">
+                                    <option value="ISO 100, f/1.8 aperture, 1/250s shutter speed, soft natural daylight, subtle film grain, photo realistic skin texture">Natural Daylight RAW</option>
+                                    <option value="Cinematic Volumetric Studio Lighting, key light and subtle rim light, f/2.0 aperture">Cinematic Studio Lighting</option>
+                                    <option value="Kodak Portra 400 color profile, warm natural tones, soft highlights, subtle micro-contrast">Kodak Portra 400 Film</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Aspect Ratio Parameters -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">សមាមាត្ររូបភាព (Aspect Ratio)</label>
+                            <div class="grid grid-cols-3 gap-2" id="ar-container">
+                                <button type="button" class="ar-btn active-ar neu-pressed-sm py-1.5 text-xs text-center font-bold" data-ar="--ar 3:4">3:4 (Portrait)</button>
+                                <button type="button" class="ar-btn neu-flat-sm py-1.5 text-xs text-center font-bold text-neu-muted" data-ar="--ar 16:9">16:9 (Cinema)</button>
+                                <button type="button" class="ar-btn neu-flat-sm py-1.5 text-xs text-center font-bold text-neu-muted" data-ar="--ar 1:1">1:1 (Square)</button>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-neu-muted mb-1">កំណត់ចំណាំបន្ថែម (Optional Notes)</label>
+                            <div class="neu-pressed-sm p-2">
+                                <textarea id="custom-notes" rows="2" placeholder="ឧ. បន្ថែមពន្លឺព្រះអាទិត្យចាំង, សម្លៀកបំពាក់ប្រពៃណីខ្មែរ..." class="w-full bg-transparent text-xs text-neu-dark focus:outline-none custom-scrollbar resize-none font-medium"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <button id="generate-btn" class="w-full neu-btn-blue py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mt-6">
+                            <i data-lucide="wand-2" class="w-5 h-5"></i>
+                            បង្កើត Prompt (Generate Prompt)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Output Panel -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="neu-flat p-6 h-[600px] flex flex-col relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-sm font-bold text-neu-dark flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-neu-accent"></i>
+                            លទ្ធផល Prompt (Generated Output)
+                        </h4>
+                        <button id="copy-btn" class="neu-btn-action p-2 rounded-lg" title="ចម្លងអត្ថបទ">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div class="flex-1 neu-pressed p-4 overflow-hidden relative">
+                        <textarea id="output-area" readonly class="w-full h-full bg-transparent text-xs text-neu-muted font-mono leading-relaxed resize-none focus:outline-none custom-scrollbar" placeholder="លទ្ធផលនឹងបង្ហាញទីនេះ..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Elements
+        const dropArea = document.getElementById('drop-area');
+        const imageInput = document.getElementById('image-input');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+        const removeImgBtn = document.getElementById('remove-img-btn');
+        const arBtns = document.querySelectorAll('.ar-btn');
+        const generateBtn = document.getElementById('generate-btn');
+        const outputArea = document.getElementById('output-area');
+        const copyBtn = document.getElementById('copy-btn');
+        const toastContainer = document.getElementById('toast-container');
+
+        let selectedAR = '--ar 3:4';
+        let hasImage = false;
+
+        // Drag and Drop
+        dropArea.addEventListener('click', () => imageInput.click());
+        imageInput.addEventListener('change', handleFile);
+        dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.style.opacity = '0.8'; });
+        dropArea.addEventListener('dragleave', () => dropArea.style.opacity = '1');
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.opacity = '1';
+            if (e.dataTransfer.files.length) handleFile({ target: { files: e.dataTransfer.files } });
+        });
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                    uploadPlaceholder.classList.add('hidden');
+                    hasImage = true;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        removeImgBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            imageInput.value = '';
+            previewContainer.classList.add('hidden');
+            uploadPlaceholder.classList.remove('hidden');
+            hasImage = false;
+        });
+
+        // AR Selection
+        arBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                arBtns.forEach(b => {
+                    b.classList.remove('active-ar');
+                    b.classList.add('neu-flat-sm');
+                    b.classList.remove('neu-pressed-sm');
+                });
+                btn.classList.add('active-ar');
+                btn.classList.remove('neu-flat-sm');
+                btn.classList.add('neu-pressed-sm');
+                selectedAR = btn.getAttribute('data-ar');
+            });
+        });
+
+        // Toast
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'neu-flat p-4 text-xs font-bold text-neu-dark pointer-events-auto';
+            toast.textContent = msg;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Copy
+        copyBtn.addEventListener('click', () => {
+            outputArea.select();
+            document.execCommand('copy');
+            showToast('បានចម្លងជោគជ័យ!');
+        });
+
+        // Generate Prompt (Pure Client-side, no server error)
+        generateBtn.addEventListener('click', () => {
+            const subject = document.getElementById('subject-select').value;
+            const hair = document.getElementById('hair-select').value;
+            const scenery = document.getElementById('scenery-select').value;
+            const camera = document.getElementById('camera-select').value;
+            const lens = document.getElementById('lens-select').value;
+            const settings = document.getElementById('settings-select').value;
+            const notes = document.getElementById('custom-notes').value;
+
+            let prompt = [];
+            
+            // Subject selection rules
+            if (subject === 'couple') {
+                prompt.push('A young East Asian couple standing close to each other, identical body heights, shoulders and eyes perfectly aligned horizontally');
+            } else if (subject === 'single') {
+                prompt.push('A professional portrait of a single individual, highly detailed facial features');
+            } else if (subject === 'auto') {
+                prompt.push('A professional high-end masterpiece portrait with stunning emotional expression');
+            } else if (subject === 'none') {
+                prompt.push('An atmospheric cinematic scene');
+            }
+
+            // Hair option
+            if (hair === 'include') {
+                prompt.push('styled with modern trendy hairstyle');
+            }
+
+            // Scenery
+            if (scenery) {
+                prompt.push(scenery);
+            }
+
+            // Camera, lens, settings
+            prompt.push(camera);
+            prompt.push(lens);
+            prompt.push(settings);
+            
+            // Notes
+            if (notes) {
+                prompt.push(notes);
+            }
+
+            // Final Prompt construction
+            let imageRefTag = hasImage ? ' --sref <image_url> --cw 100' : '';
+            const finalPrompt = prompt.join(', ') + '. ' + selectedAR + imageRefTag + ' --v 6.0';
+            
+            outputArea.value = finalPrompt;
+            showToast('បង្កើត Prompt ជោគជ័យ!');
+        });
+    </script>
+</body>
+</html>
