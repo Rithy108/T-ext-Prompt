@@ -32,9 +32,9 @@ async def generate_prompt(data: dict):
             image = Image.open(io.BytesIO(image_bytes))
             contents.append(image)
 
-        # ហៅប្រើម៉ូដែល gemini-2.5-flash ឬ gemini-1.5-flash តាមតម្រូវការ
+        # ហៅប្រើម៉ូដែល gemini-1.5-flash ឬ gemini-1.5-flash តាមតម្រូវការ
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model='gemini-1.5-flash',
             contents=contents
         )
 
