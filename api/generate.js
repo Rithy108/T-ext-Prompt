@@ -27,7 +27,8 @@ export default async function handler(req, res) {
             contents: [{ parts }]
         };
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        // ប្រើប្រាស់ម៉ូដែលជំនាន់ថ្មី gemini-3.6-flash
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(geminiUrl, {
             method: 'POST',
@@ -45,7 +46,8 @@ export default async function handler(req, res) {
             return res.status(200).json({ success: true, text: generatedText });
         } else {
             console.error('Gemini API Response Error:', JSON.stringify(data));
-            return res.status(500).json({ success: false, error: data.error?.message || 'Failed to generate prompt from Gemini API.' });
+            const errorMessage = data.error?.message || 'Failed to generate prompt from Gemini API.';
+            return res.status(500).json({ success: false, error: errorMessage });
         }
 
     } catch (error) {
