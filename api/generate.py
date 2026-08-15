@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-import google.generativeai as genai
+import google-genai
 import os
 from PIL import Image
 import io
